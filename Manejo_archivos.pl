@@ -1,67 +1,46 @@
-
 % Lee un archivo .txt y guarda su contenido en una lista.
 read_file(File, CharList) :-
-	see(File),
-	read_list(CharList),
-	%print(CharList),
-	seen.
+	see(File),			 % Abre el archivo para lectura.
+	read_list(CharList),	
+	seen.				 % Cierra el archivo.
  
 %  Lee los caracteres del input hasta llegar al final (hasta alcanzar la bandera eof).
 read_list([Char | List]) :-
 	get0(Char),   	 % Obtiene el valor ASCII del caracter. 
-	Char =\= -1, !,  % Mientras no ha llegado al final del archivo.
-	%put(Char),		 % Imprime el caracter.		
+	Char =\= -1, !,  % Mientras no haya llegado al final del archivo.
 	read_list(List).
+read_list([]).		 % Si es una lista vacía.
 
-read_list([]).
+%-----------------------------------------------------------------------%
+% Todo lo anterior da como resultado una lista de la forma:				%
+%           [49,32,50,32,51,10,49,49,32,49,51,32,50,57,32,51,49,10,...] %
+% ya que guarda el valor ASCII de cada caracter leído.					%
+%-----------------------------------------------------------------------%
 
-% Convierte cada código ASCII de una lista en el caracter equivalente.
-cambiarCaracteres([Car | Lista]) :-
-	(	
-	Car =:= 10 -> print("\n"); % Encontró cambio de línea en ASCII.
-	Car =:= 32 -> put(Car); % Encontró un espacio en ASCII.
-	Car =:= 48 -> print(0);	  % Encontró un 0 en ASCII.
-	Car =:= 49 -> print(1);	  % Encontró un 1 en ASCII.
-	Car =:= 50 -> print(2);	  % Encontró un 2 en ASCII.
-	Car =:= 51 -> print(3);	  % Encontró un 3 en ASCII.
-	Car =:= 52 -> print(4);	  % Encontró un 4 en ASCII.
-	Car =:= 53 -> print(5);   % Encontró un 5 en ASCII.
-	Car =:= 54 -> print(6);   % Encontró un 6 en ASCII.
-	Car =:= 55 -> print(7);   % Encontró un 7 en ASCII.
-	Car =:= 56 -> print(8);   % Encontró un 8 en ASCII.
-	Car =:= 57 -> print(9);	  % Encontró un 9 en ASCII.
-	print(Car)),
-	cambiarCaracteres(Lista).
-cambiarCaracteres([]).
+% Recibe una lista con la siguiente estructura: 
+%						["1 2 3","11 13 29 31","26 11 13 24"]
+% Entonces se recorre cada string y lo separa en una lista a partir de los espacios en blanco.
+% Por ejemplo: toma el "1 2 3" y lo separa a ["1", "2", "3"] y así con los demás.
+recorreFilas([_|_], 1).
+recorreFilas([C|Xs], N):-
+	N2 is N - 1,       
+	split_string(C, ' ', '', LS), % Separa el string C a partir de los espacios y guarda el resultado en la lista LS.
+    print(LS),
+    nl,
+    recorreFilas(Xs, N2).
 
-c :- 
-	read_file('Prueba.txt', L),
-	cambiarCaracteres(L).
+% Obtiene el tamaño de una lista.
+tamLista([], L, L).			% Si la lista es vacía.
+tamLista([_|Xs], N, L) :- 	% Si tiene elementos.
+    N2 is N + 1,
+    tamLista(Xs, N2, L).
 
-conc([], L2,L2).
-conc([X|R],L2,[X|Z]) :- conc(R, L2, Z). 
+main :- 
+	read_file('Prueba.txt', L),		% Lee el archivo y guarda el contenido ASCII en L.
+	atom_chars(SC, L),				% Toma la lista L y convierte cada ASCII a un caracter y lo guarda en SC.
+	split_string(SC, '\n', '', LS),	% Separa el string SC a partir de los cambios de línea y guarda el resultado en la lista LS.
+	tamLista(LS, 0, Tam),			% Guarda en Tam el tamaño de la lista LS.		
+	recorreFilas(LS, Tam).
 
-my_length([], L, L).
+cls :- write('\e[2J'). % Es sólo para limpiar la consola.
 
-my_length([_|Xs], N, L):-
-          N2 is N + 1,
-          my_length(Xs, N2, L).
-
-
-
-
-/*main :-
-    open('Prueba.txt', read, Str),
-    leersh(Str,Lines),
-    close(Str),
-    write(Lines), nl.
-
-leersh(Stream,[]) :-
-    at_end_of_stream(Stream).
-
-leersh(Stream,[X|L]) :-
-    \+ at_end_of_stream(Stream),
-    read(Stream,X),
-    leersh(Stream,L).*/
-
-cls :- write('\e[2J'). % para limpiar la consola.
