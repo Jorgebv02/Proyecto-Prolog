@@ -1,4 +1,38 @@
 /*RETORNA UNA LISTA CON LA SIGUIENTE COMBINACION DE ELEMENTOS
+ * DADA LA LISTA [A,B,C,D,E,F]
+ * RETORNA [[A,B],[A,F],[B,C],[C,D],[D,E],[E,F]]
+ * 
+ * NECESARIA PARA LOS HEXAGONOS
+ * */
+
+combinatoriaHexagono(L1,R):- getElem(0,L1,S1), getElem(1,L1,S2),
+    getElem(2,L1,S3),getElem(3,L1,S4), getElem(4,L1,S5),
+    getElem(5,L1,S6),insFinal([],[S1,S2],S7), insFinal(S7,[S1,S6],S8),
+    insFinal(S8,[S2,S3],S9),insFinal(S9,[S3,S4],S10),
+    insFinal(S10,[S4,S5],S11),insFinal(S11,[S5,S6],R).
+
+procHexagono(L1,L2):- combinatoriaHexagono(L1,R), my_sum_elements(R,L2).
+
+esHexagono(L):- long(L,0,L1), L1=6, procHexagono(L,R1),filtra(R1,R2),long(R2,0,M),
+    M=2, existe(0,R2),!. 
+
+/*RETORNA UNA LISTA CON LA SIGUIENTE COMBINACION DE ELEMENTOS
+ * DADA LA LISTA [A,B,C]
+ * RETORNA [[A,B],[A,C],[B,C]]
+ * 
+ * NECESARIA PARA LOS TRIANGULOS
+ * */
+
+combinatoriaTriangulo(L1,R):- getElem(0,L1,S1), getElem(1,L1,S2),
+    getElem(2,L1,S3),insFinal([],[S1,S2],S5), insFinal(S5,[S1,S3],S6),
+    insFinal(S6,[S2,S3],R).
+
+procTriangulo(L1,L2):- combinatoriaTriangulo(L1,R), my_sum_elements(R,L2).
+
+esTriangulo(L):- long(L,0,L1), L1=3, procTriangulo(L,R1),filtra(R1,R2),long(R2,0,M),
+    M=2, existe(0,R2),!. 
+
+/*RETORNA UNA LISTA CON LA SIGUIENTE COMBINACION DE ELEMENTOS
  * DADA LA LISTA [A,B,C,D]
  * RETORNA [[A,B],[A,D],[B,C],[C,D]]
  * 
@@ -19,7 +53,7 @@ my_sum_elements([X|Xs], S):-
 long( [ _| Xs ], I, M ) :- I1 is I + 1, long( Xs, I1, M ) .
 long( [], M, M ).
 
-proc22(L1,L2):- combinatoriaParalelogramo(L1,R), my_sum_elements(R,L2).
+procParalelogramo(L1,L2):- combinatoriaParalelogramo(L1,R), my_sum_elements(R,L2).
 
 filtra( [ X | Xs ], [ X | Ys ] ) :- borra( X, [ X | Xs ], Zs ), filtra( Zs, Ys ) .
 filtra( [], [] ) .
@@ -35,7 +69,7 @@ existe(X,[X|_]):-!.
 existe(X,[_|R]):- 
 existe(X,R).
 
-esParalelogramo(L):- proc22(L,R1),filtra(R1,R2),long(R2,0,M),
+esParalelogramo(L):- long(L,0,L1), L1=4,procParalelogramo(L,R1),filtra(R1,R2),long(R2,0,M),
     M=2, existe(0,R2),!.  
     
 /*
@@ -62,7 +96,7 @@ getElem(X1,R,Sol).
  * */
 proc([],[]).
 proc([X|Xs], S):-
-          proc(Xs, S2),buscarPosElem([[1],[2,3],[4,5,6],[7,8,9,10],[11,12,13,14,15],[16,17,18,19,20,21],[22,23,24,25,26,27,28]],X,R1),
+          proc(Xs, S2),buscarPosElem([[1],[2,3],[4,5,6],[7,8,9,10],[11,12,13,14,15],[16,17,18,19,20,21],[22,23,24,25,26,27,28],[29,30,31,32,33,34,35,36]],X,R1),
     insFinal(S2,R1,S).
 
 
