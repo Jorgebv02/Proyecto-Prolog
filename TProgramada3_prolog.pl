@@ -35,11 +35,19 @@ recorreFilas([C|Xs], N):-
 
 
 main :- 
-	read_file('Prueba.txt', L),		% Lee el archivo y guarda el contenido ASCII en L.
-	atom_chars(SC, L),				% Toma la lista L y convierte cada ASCII a un caracter y lo guarda en SC.
-	split_string(SC, '\n', '', LS),	% Separa el string SC a partir de los cambios de línea y guarda el resultado en la lista LS.
-	largoLista(LS, 0, Tam),			% Guarda en Tam el tamaño de la lista LS.		
-	recorreFilas(LS, Tam).
+    write('Por favor, ingrese el nombre del archivo txt:'),
+    nl,
+    write('>> '),
+    read(Archivo),                  % Lee el nombre de archivo que haya escrito el usuario.
+    read_file(Archivo, L),          % Lee el archivo y guarda el contenido ASCII en L.
+    atom_chars(SC, L),              % Toma la lista L y convierte cada ASCII a un caracter y lo guarda en SC.
+    split_string(SC, '\n', '', LS), % Separa el string SC a partir de los cambios de línea y guarda el resultado en la lista LS.
+    largoLista(LS, 0, Tam),         % Guarda en Tam el tamaño de la lista LS.       
+    nl,
+    write("#---------------------------------#"), nl,
+    write("#             SALIDA              #"), nl,
+    write("#---------------------------------#"), nl,
+    recorreFilas(LS, Tam).
 
 cls :- write('\e[2J'). % Es sólo para limpiar la consola.
 
