@@ -25,7 +25,7 @@ read_list([]).		 % Si es una lista vacía.
 %						["1 2 3","11 13 29 31","26 11 13 24"]
 % Entonces se recorre cada string y lo separa en una lista a partir de los espacios en blanco.
 % Por ejemplo: toma el "1 2 3" y lo separa a ["1", "2", "3"] y así con los demás.
-recorreFilas([_|_], 1).
+recorreFilas([], 0).
 recorreFilas([C|Xs], N):-
 	N2 is N - 1,       
 	split_string(C, ' ', '', LS), % Separa el string C a partir de los espacios y guarda el resultado en la lista LS.
@@ -64,7 +64,7 @@ convertirListaAux(L,LargoLista,Resultado):-
 principal(Lista):- (esTriangulo(Lista), print(Lista),write(' Los vértices son de un triángulo válido'),!);
     (esHexagono(Lista),print(Lista),write(' Los vértices son de un hexagono válido'),!); 
     (esParalelogramo(Lista), print(Lista),write(' Los vértices son de un paralelogramo válido'),!);
-    (print(Lista),write(' no son verticés de una figura válida.'),!).
+    (print(Lista),write(' no son vértices de una figura válida.'),!).
 
 /*RETORNA UNA LISTA CON LA SIGUIENTE COMBINACION DE ELEMENTOS
  * DADA LA LISTA [A,B,C,D,E,F]
